@@ -1,0 +1,4 @@
+name: over_my_Dead_body
+version: ${project.version}
+main: kun.minecraft_plugin.dead_body.Dead_body
+api-version: 1.15
