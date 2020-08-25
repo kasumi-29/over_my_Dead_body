@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class room_in implements Listener {
     private final Dead_body m;
@@ -22,5 +23,10 @@ public class room_in implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
         m.addDethLoc(event.getEntity().getLocation());
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event){
+        m.killChecker(event.getTo());
     }
 }

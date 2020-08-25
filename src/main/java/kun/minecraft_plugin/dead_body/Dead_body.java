@@ -37,8 +37,17 @@ public final class Dead_body extends JavaPlugin {
         saveDeth();
     }
 
+    public void killChecker(Location l){
+        //Todo dethLocにあるか判定する
+    }
+
     public void addDethLoc(Location l){
-        dethLoc.add(new XZLocation(l));
+        XZLocation XZl=new XZLocation(l);
+        if(!safeZone.contains(XZl)) {
+            dethLoc.add(XZl);
+        }else{
+            getLogger().info("安全地帯で死亡イベントが発生しました。");
+        }
     }
     public void setFirst_sp(Location l){
         if(first_sp==null) {
