@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 
 import static org.bukkit.Bukkit.getConsoleSender;
@@ -16,13 +17,11 @@ import static org.bukkit.Bukkit.getConsoleSender;
 public final class Dead_body extends JavaPlugin {
     private Location first_sp=null;
     private int big=3;
-    private int Locmax=10;
-    private Location[] dethLoc;
-    private static int pointer=0;
+    private HashSet<Location> dethLoc;
 
     @Override
     public void onEnable() {
-        dethLoc=new Location[Locmax];
+        dethLoc=new HashSet<>();
         getServer().getPluginManager().registerEvents(new room_in(this), this);
     }
 
@@ -32,11 +31,7 @@ public final class Dead_body extends JavaPlugin {
     }
 
     public void addDethLoc(Location l){
-        dethLoc[pointer]=l;
-        pointer++;
-        if(pointer<=Locmax){
-            pointer=0;
-        }
+        dethLoc.add(l);
         System.out.println(l.getX()+"::"+l.getZ());
     }
     public void setFirst_sp(Location l){
