@@ -1,36 +1,27 @@
 package kun.minecraft_plugin.dead_body;
 
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.UUID;
 
 public class XZLocation implements Serializable {
-    private final World world;
+    private final UUID world;
     private int X;
     private int Z;
     public XZLocation(World world,int X,int Z){
-        this.world=world;
+        this.world=world.getUID();
         this.X=X;
         this.Z=Z;
     }
     public XZLocation(Location location){
-        this.world=location.getWorld();
+        this.world= Objects.requireNonNull(location.getWorld()).getUID();
         this.X= (int) location.getX();
         this.Z= (int) location.getZ();
-    }
-    public HashSet<XZLocation> fill(XZLocation l){
-        HashSet<XZLocation> output=new HashSet<>();
-        if(this.world.equals(l.world)) {
-            for (int tx = Math.min(this.X, l.X); tx <= Math.max(this.X, l.X); tx++) {
-                for (int tz = Math.min(this.Z, l.Z); tz <= Math.max(this.X, l.Z); tz++) {
-                    output.add(new XZLocation(this.world,tx,tz));
-                }
-            }
-        }
-        return output;
     }
 
     public void addX(int r){
@@ -43,21 +34,6 @@ public class XZLocation implements Serializable {
         this.addX(r);
         this.addZ(r);
         return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        XZLocation that = (XZLocation) o;
-        return X == that.X &&
-                Z == that.Z &&
-                Objects.equals(world, that.world);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(world, X, Z);
     }
 
     public int getX() {
@@ -76,7 +52,22 @@ public class XZLocation implements Serializable {
         Z = z;
     }
 
-    public World getWorld() {
+    public UUID getWorldUid() {
         return world;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        XZLocation that = (XZLocation) o;
+        return X == that.X &&
+                Z == that.Z &&
+                world.equals(that.world);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(world, X, Z);
     }
 }

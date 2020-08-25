@@ -1,26 +1,23 @@
 package kun.minecraft_plugin.dead_body;
 
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.HashMap;
+import java.io.*;
 import java.util.HashSet;
 import java.util.Objects;
-
-import static org.bukkit.Bukkit.getConsoleSender;
 
 public final class Dead_body extends JavaPlugin {
     private Location first_sp=null;
     private int big=3;
+    private final String path="plugins\\dead_body\\dethLoc.dat";
     private HashSet<XZLocation> dethLoc;
-    private HashSet<XZLocation> safeZoon;
+    private HashSet<XZLocation> safeZone;
 
     public Dead_body() {
     }
@@ -28,8 +25,10 @@ public final class Dead_body extends JavaPlugin {
     @Override
     public void onEnable() {
         dethLoc=new HashSet<>();
-        safeZoon=new HashSet<>();
+        safeZone =new HashSet<>();
         getServer().getPluginManager().registerEvents(new room_in(this), this);
+        loadDeth();
+
         getLogger().info("読み込み完了！");
     }
 
@@ -40,7 +39,6 @@ public final class Dead_body extends JavaPlugin {
 
     public void addDethLoc(Location l){
         dethLoc.add(new XZLocation(l));
-        System.out.println(l.getX()+"::"+l.getZ());
     }
     public void setFirst_sp(Location l){
         if(first_sp==null) {
@@ -67,7 +65,7 @@ public final class Dead_body extends JavaPlugin {
                             }
                         }
                     }
-                    safeZoon.add(new XZLocation(l));
+                    safeZone.add(new XZLocation(l));
                     l.setZ(l.getZ()+1);
                 }
                 l.setX(first_sp.getX()+x-big);
@@ -78,12 +76,39 @@ public final class Dead_body extends JavaPlugin {
     public Location getFirst_sp(){
         return first_sp;
     }
+    private boolean datFilecheck(boolean flag){
+        File DethLog=new File(path);
+        boolean output = DethLog.exists();
+        if(flag&&(!output)){
+            try {
+                new File("plugins\\dead_body").mkdirs();
+                output=DethLog.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return !output;
+    }
     public void saveDeth(){
-        try(FileOutputStream f = new FileOutputStream("plugins/dethLoc.dat");
+        if(datFilecheck(true)){
+            getLogger().info("ファイルをセーブするのに失敗しました。");
+            return;
+        }
+        try(FileOutputStream f = new FileOutputStream(path);
             BufferedOutputStream b = new BufferedOutputStream(f);
             ObjectOutputStream out = new ObjectOutputStream(b)){
-                out.writeObject(dethLoc);
+            out.writeObject(dethLoc);
         } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+    }
+    public void loadDeth(){
+        if (datFilecheck(false)){return;}
+        try(FileInputStream f = new FileInputStream(path);
+            BufferedInputStream b = new BufferedInputStream(f);
+            ObjectInputStream in = new ObjectInputStream(b)){
+            dethLoc = (HashSet<XZLocation>) in.readObject();
+        } catch ( IOException | ClassNotFoundException e ) {
             e.printStackTrace();
         }
     }
