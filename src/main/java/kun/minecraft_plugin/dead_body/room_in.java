@@ -3,6 +3,7 @@ package kun.minecraft_plugin.dead_body;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class room_in implements Listener {
@@ -16,5 +17,10 @@ public class room_in implements Listener {
         Player p=event.getPlayer();
         m.setFirst_sp(p.getLocation());
         p.teleport(m.getFirst_sp());
+    }
+
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event){
+        m.addDethLoc(event.getEntity().getLocation());
     }
 }
