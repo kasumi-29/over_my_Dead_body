@@ -3,10 +3,11 @@ package kun.minecraft_plugin.dead_body;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 
-public class XZLocation {
+public class XZLocation implements Serializable {
     private final World world;
     private int X;
     private int Z;

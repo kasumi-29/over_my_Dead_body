@@ -73,20 +73,13 @@ public final class Dead_body extends JavaPlugin {
                 l.setX(first_sp.getX()+x-big);
                 l.setZ(first_sp.getZ()-big-1);
             }
-
-            getServer().getScheduler().runTask(this,()->{
-                locate_toString();
-            });
         }
-    }
-    private void locate_toString(){
-
     }
     public Location getFirst_sp(){
         return first_sp;
     }
     public void saveDeth(){
-        try(FileOutputStream f = new FileOutputStream("dethLoc.dat");
+        try(FileOutputStream f = new FileOutputStream("plugins/dethLoc.dat");
             BufferedOutputStream b = new BufferedOutputStream(f);
             ObjectOutputStream out = new ObjectOutputStream(b)){
                 out.writeObject(dethLoc);
