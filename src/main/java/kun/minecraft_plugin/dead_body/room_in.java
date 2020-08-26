@@ -27,6 +27,8 @@ public class room_in implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
-        m.killChecker(event.getTo());
+        if(m.killChecker(event.getTo())){
+            event.getPlayer().setHealth(0d);
+        }
     }
 }

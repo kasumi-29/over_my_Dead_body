@@ -4,12 +4,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 public final class Dead_body extends JavaPlugin {
@@ -27,6 +30,22 @@ public final class Dead_body extends JavaPlugin {
         dethLoc=new HashSet<>();
         safeZone =new HashSet<>();
         getServer().getPluginManager().registerEvents(new room_in(this), this);
+        Objects.requireNonNull(getCommand("set-safezone")).setExecutor((sender, command, label, args) -> {
+            if(!(sender instanceof Player)){
+                sender.sendMessage("[!!!ERR!!!]ゲーム内から実行してください");
+                return false;
+            }
+            first_sp=null;
+            setFirst_sp(((Player) sender).getLocation());
+            return true;
+        });
+        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());
+        PluginCommand setWS=Objects.requireNonNull(getCommand("setworldspawn"));
+        setWS.setExecutor((sender, command, label, args) -> {
+            sender.sendMessage("[警告]このコマンドは安全地帯での初期スポーンを保証できなくなります。");
+            return setWS.execute(sender,label,args);
+        });
+
         loadDeth();
 
         getLogger().info("読み込み完了！");
@@ -37,8 +56,8 @@ public final class Dead_body extends JavaPlugin {
         saveDeth();
     }
 
-    public void killChecker(Location l){
-        //Todo dethLocにあるか判定する
+    public boolean killChecker(Location l){
+        return dethLoc.contains(new XZLocation(l));
     }
 
     public void addDethLoc(Location l){
@@ -90,7 +109,7 @@ public final class Dead_body extends JavaPlugin {
         boolean output = DethLog.exists();
         if(flag&&(!output)){
             try {
-                new File("plugins\\dead_body").mkdirs();
+                boolean a=new File("plugins\\dead_body").mkdirs();
                 output=DethLog.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,7 +135,11 @@ public final class Dead_body extends JavaPlugin {
         try(FileInputStream f = new FileInputStream(path);
             BufferedInputStream b = new BufferedInputStream(f);
             ObjectInputStream in = new ObjectInputStream(b)){
-            dethLoc = (HashSet<XZLocation>) in.readObject();
+            if(in.readObject() instanceof HashSet) {
+                dethLoc = (HashSet<XZLocation>) in.readObject();
+            }else{
+                getLogger().info("ファイルをロードするのに失敗しました。");
+            }
         } catch ( IOException | ClassNotFoundException e ) {
             e.printStackTrace();
         }
