@@ -39,12 +39,12 @@ public final class Dead_body extends JavaPlugin {
             setFirst_sp(((Player) sender).getLocation());
             return true;
         });
-        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());
+        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());/*
         PluginCommand setWS=Objects.requireNonNull(getCommand("setworldspawn"));
         setWS.setExecutor((sender, command, label, args) -> {
             sender.sendMessage("[警告]このコマンドは安全地帯での初期スポーンを保証できなくなります。");
             return setWS.execute(sender,label,args);
-        });
+        });*/
 
         loadDeth();
 

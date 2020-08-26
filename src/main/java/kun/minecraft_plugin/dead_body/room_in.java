@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -30,5 +31,12 @@ public class room_in implements Listener {
         if(m.killChecker(event.getTo())){
             event.getPlayer().setHealth(0d);
         }
+    }
+
+    @EventHandler
+    public void onGetCommand(PlayerCommandSendEvent event){
+        //Todo setworldspawnをキャッチできないか試行錯誤
+        String s[]=event.getCommands().toArray(new String[0]);
+        System.out.println(s[0]);
     }
 }

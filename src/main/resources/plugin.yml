@@ -4,6 +4,7 @@ main: kun.minecraft_plugin.dead_body.Dead_body
 api-version: 1.15
 
 commands:
-  set-safezone: "安全地帯を作成します"
+  set-safezone:
+    description: "安全地帯を作成します"
     permission: op
     usage: "/<command>"
