@@ -1,18 +1,14 @@
 package kun.minecraft_plugin.dead_body;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 
 public final class Dead_body extends JavaPlugin {
@@ -39,13 +35,7 @@ public final class Dead_body extends JavaPlugin {
             setFirst_sp(((Player) sender).getLocation());
             return true;
         });
-        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());/*
-        PluginCommand setWS=Objects.requireNonNull(getCommand("setworldspawn"));
-        setWS.setExecutor((sender, command, label, args) -> {
-            sender.sendMessage("[警告]このコマンドは安全地帯での初期スポーンを保証できなくなります。");
-            return setWS.execute(sender,label,args);
-        });*/
-
+        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());
         loadDeth();
 
         getLogger().info("読み込み完了！");
@@ -88,7 +78,7 @@ public final class Dead_body extends JavaPlugin {
                         m.setY(m.getY()+1);
                         m.getBlock().setType(Material.AIR);
                         if(q==1){
-                            if((x==0|x==2*big+1)&(z==0|z==2*big+1)){
+                            if((x==0||x==2*big+1)&(z==0||z==2*big+1)){
                                 m.getBlock().setType(Material.BEDROCK);
                             }
                         }
@@ -130,6 +120,8 @@ public final class Dead_body extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+    @SuppressWarnings("unchecked")
     public void loadDeth(){
         if (datFilecheck(false)){return;}
         try(FileInputStream f = new FileInputStream(path);

@@ -1,10 +1,12 @@
 package kun.minecraft_plugin.dead_body;
 
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -28,15 +30,17 @@ public class room_in implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
+        GameMode player_g=event.getPlayer().getGameMode();
+        if(player_g.equals(GameMode.CREATIVE)||player_g.equals(GameMode.SPECTATOR)){return;}
         if(m.killChecker(event.getFrom())){
             event.getPlayer().setHealth(0d);
         }
     }
 
     @EventHandler
-    public void onGetCommand(PlayerCommandSendEvent event){
-        //Todo setworldspawnをキャッチできないか試行錯誤
-        String s[]=event.getCommands().toArray(new String[0]);
-        //System.out.println(s[0]);
+    public void onGetCommand(PlayerCommandPreprocessEvent event){
+        if(event.getMessage().contains("setworldspawn")) {
+            event.getPlayer().sendMessage(ChatColor.RED+"[警告]このコマンドは安全地帯での初期スポーンを保証できなくなります。");
+        }
     }
 }
