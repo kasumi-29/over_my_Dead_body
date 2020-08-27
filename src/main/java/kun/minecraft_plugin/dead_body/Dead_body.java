@@ -135,11 +135,7 @@ public final class Dead_body extends JavaPlugin {
         try(FileInputStream f = new FileInputStream(path);
             BufferedInputStream b = new BufferedInputStream(f);
             ObjectInputStream in = new ObjectInputStream(b)){
-            if(in.readObject() instanceof HashSet) {
-                dethLoc = (HashSet<XZLocation>) in.readObject();
-            }else{
-                getLogger().info("ファイルをロードするのに失敗しました。");
-            }
+            dethLoc = (HashSet<XZLocation>) in.readObject();
         } catch ( IOException | ClassNotFoundException e ) {
             e.printStackTrace();
         }

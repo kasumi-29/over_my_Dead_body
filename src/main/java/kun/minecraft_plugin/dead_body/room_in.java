@@ -28,7 +28,7 @@ public class room_in implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
-        if(m.killChecker(event.getTo())){
+        if(m.killChecker(event.getFrom())){
             event.getPlayer().setHealth(0d);
         }
     }
@@ -37,6 +37,6 @@ public class room_in implements Listener {
     public void onGetCommand(PlayerCommandSendEvent event){
         //Todo setworldspawnをキャッチできないか試行錯誤
         String s[]=event.getCommands().toArray(new String[0]);
-        System.out.println(s[0]);
+        //System.out.println(s[0]);
     }
 }
