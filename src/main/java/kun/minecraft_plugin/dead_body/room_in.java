@@ -24,7 +24,7 @@ public class room_in implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event){
-        m.addDethLoc(event.getEntity().getLocation());
+        m.addDeathLoc(event.getEntity().getLocation());
     }
 
     @EventHandler
@@ -38,7 +38,7 @@ public class room_in implements Listener {
 
     @EventHandler
     public void onGetCommand(PlayerCommandPreprocessEvent event){
-        if(event.getMessage().contains("setworldspawn")) {
+        if(event.getMessage().contains("setworldspawn")||event.getMessage().contains("spawnpoint")) {
             event.getPlayer().sendMessage(ChatColor.RED+"[警告]このコマンドは安全地帯での初期スポーンを保証できなくなります。");
         }
     }

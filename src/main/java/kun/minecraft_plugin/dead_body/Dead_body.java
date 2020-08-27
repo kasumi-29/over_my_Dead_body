@@ -16,9 +16,9 @@ import java.util.*;
 public final class Dead_body extends JavaPlugin {
     private Location first_sp=null;
     private int big=3;
-    private final String deth_path="plugins\\dead_body\\dethLoc.dat";
-    private final String safe_path="plugins\\dead_body\\safeLoc.dat";
-    private HashSet<XZLocation> dethLoc;
+    private String death_path="plugins\\dead_body\\deathLoc.dat";
+    private String safe_path="plugins\\dead_body\\safeLoc.dat";
+    private HashSet<XZLocation> deathLoc;
     private HashSet<XZLocation> safeZone;
     static private class zeroArray implements TabCompleter {
         @Override
@@ -29,9 +29,14 @@ public final class Dead_body extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //Todo コンフィグファイルからの読み込み
-        dethLoc=new HashSet<>();
+        deathLoc=new HashSet<>();
         safeZone =new HashSet<>();
+
+        saveDefaultConfig();
+        big=getConfig().getInt("big");
+        death_path=getConfig().getString("death_path");
+        safe_path=getConfig().getString("safe_path");
+
         getServer().getPluginManager().registerEvents(new room_in(this), this);
         Objects.requireNonNull(getCommand("set-safezone")).setExecutor((sender, command, label, args) -> {
             if(!(sender instanceof Player)){
@@ -72,13 +77,13 @@ public final class Dead_body extends JavaPlugin {
 
     private void sl_comp(boolean flag){
         if(flag){//save側
-            saveDeth(deth_path,dethLoc);
-            saveDeth(safe_path,safeZone);
+            savedeath(death_path,deathLoc);
+            savedeath(safe_path,safeZone);
         }else{//load側
-            HashSet<XZLocation> tempD=loadDeth(deth_path);
-            HashSet<XZLocation> tempS=loadDeth(safe_path);
+            HashSet<XZLocation> tempD=loaddeath(death_path);
+            HashSet<XZLocation> tempS=loaddeath(safe_path);
             if(tempD!=null) {
-                dethLoc = tempD;
+                deathLoc = tempD;
             }
             if(tempS!=null) {
                 safeZone = tempS;
@@ -87,13 +92,13 @@ public final class Dead_body extends JavaPlugin {
     }
 
     public boolean killChecker(Location l){
-        return dethLoc.contains(new XZLocation(l));
+        return deathLoc.contains(new XZLocation(l));
     }
 
-    public void addDethLoc(Location l){
+    public void addDeathLoc(Location l){
         XZLocation XZl=new XZLocation(l);
         if(!safeZone.contains(XZl)) {
-            dethLoc.add(XZl);
+            deathLoc.add(XZl);
         }else{
             getLogger().info("安全地帯で死亡イベントが発生しました。");
         }
@@ -135,19 +140,19 @@ public final class Dead_body extends JavaPlugin {
         return first_sp;
     }
     private boolean datFilecheck(boolean flag,String check_path){
-        File DethLog=new File(check_path);
-        boolean output = DethLog.exists();
+        File deathLog=new File(check_path);
+        boolean output = deathLog.exists();
         if(flag&&(!output)){
             try {
                 boolean a=new File("plugins\\dead_body").mkdirs();
-                output=DethLog.createNewFile();
+                output=deathLog.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return !output;
     }
-    public void saveDeth(String save_path,HashSet<XZLocation> savedata){
+    public void savedeath(String save_path,HashSet<XZLocation> savedata){
         if(datFilecheck(true,save_path)){
             getLogger().info("ファイルをセーブするのに失敗しました。");
             return;
@@ -162,7 +167,7 @@ public final class Dead_body extends JavaPlugin {
     }
 
     @SuppressWarnings("unchecked")
-    public HashSet<XZLocation> loadDeth(String load_path){
+    public HashSet<XZLocation> loaddeath(String load_path){
         if (datFilecheck(false,load_path)){return null;}
         try(FileInputStream f = new FileInputStream(load_path);
             BufferedInputStream b = new BufferedInputStream(f);
