@@ -43,24 +43,21 @@ public final class Dead_body extends JavaPlugin {
             return true;
         });
         Objects.requireNonNull(getCommand("save-locate")).setExecutor((sender, command, label, args) -> {
-            saveDeth(deth_path,dethLoc);
-            saveDeth(safe_path,safeZone);
+            sl_comp(true);
             sender.sendMessage("Save完了......");
             return true;
         });
         Objects.requireNonNull(getCommand("load-locate")).setExecutor((sender, command, label, args) -> {
-            dethLoc=loadDeth(deth_path);
-            safeZone=loadDeth(safe_path);
+            sl_comp(false);
             sender.sendMessage("Load完了......");
             return true;
         });
         Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter(new zeroArray());
         Objects.requireNonNull(getCommand("save-locate")).setTabCompleter(new zeroArray());
         Objects.requireNonNull(getCommand("load-locate")).setTabCompleter(new zeroArray());
-        dethLoc=loadDeth(deth_path);
-        safeZone=loadDeth(safe_path);
+        sl_comp(false);
 
-        if (safeZone!=null){
+        if (safeZone.size()!=0){
             Iterator<XZLocation> iterator=safeZone.iterator();
             first_sp=Objects.requireNonNull(getServer().getWorld(iterator.next().getWorldUid())).getSpawnLocation();
         }
@@ -70,8 +67,23 @@ public final class Dead_body extends JavaPlugin {
 
     @Override
     public void onDisable(){
-        saveDeth(deth_path,dethLoc);
-        saveDeth(safe_path,safeZone);
+        sl_comp(true);
+    }
+
+    private void sl_comp(boolean flag){
+        if(flag){//save側
+            saveDeth(deth_path,dethLoc);
+            saveDeth(safe_path,safeZone);
+        }else{//load側
+            HashSet<XZLocation> tempD=loadDeth(deth_path);
+            HashSet<XZLocation> tempS=loadDeth(safe_path);
+            if(tempD!=null) {
+                dethLoc = tempD;
+            }
+            if(tempS!=null) {
+                safeZone = tempS;
+            }
+        }
     }
 
     public boolean killChecker(Location l){
