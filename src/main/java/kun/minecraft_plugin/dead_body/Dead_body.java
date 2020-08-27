@@ -9,17 +9,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 
 public final class Dead_body extends JavaPlugin {
     private Location first_sp=null;
     private int big=3;
-    private final String path="plugins\\dead_body\\dethLoc.dat";
+    private final String deth_path="plugins\\dead_body\\dethLoc.dat";
+    private final String safe_path="plugins\\dead_body\\safeLoc.dat";
     private HashSet<XZLocation> dethLoc;
     private HashSet<XZLocation> safeZone;
-
-    public Dead_body() {
-    }
 
     @Override
     public void onEnable() {
@@ -36,14 +35,21 @@ public final class Dead_body extends JavaPlugin {
             return true;
         });
         Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());
-        loadDeth();
+        dethLoc=loadDeth(deth_path);
+        safeZone=loadDeth(safe_path);
+
+        if (safeZone!=null){
+            Iterator<XZLocation> iterator=safeZone.iterator();
+            first_sp=Objects.requireNonNull(getServer().getWorld(iterator.next().getWorldUid())).getSpawnLocation();
+        }
 
         getLogger().info("読み込み完了！");
     }
 
     @Override
     public void onDisable(){
-        saveDeth();
+        saveDeth(deth_path,dethLoc);
+        saveDeth(safe_path,safeZone);
     }
 
     public boolean killChecker(Location l){
@@ -94,8 +100,8 @@ public final class Dead_body extends JavaPlugin {
     public Location getFirst_sp(){
         return first_sp;
     }
-    private boolean datFilecheck(boolean flag){
-        File DethLog=new File(path);
+    private boolean datFilecheck(boolean flag,String check_path){
+        File DethLog=new File(check_path);
         boolean output = DethLog.exists();
         if(flag&&(!output)){
             try {
@@ -107,29 +113,30 @@ public final class Dead_body extends JavaPlugin {
         }
         return !output;
     }
-    public void saveDeth(){
-        if(datFilecheck(true)){
+    public void saveDeth(String save_path,HashSet<XZLocation> savedata){
+        if(datFilecheck(true,save_path)){
             getLogger().info("ファイルをセーブするのに失敗しました。");
             return;
         }
-        try(FileOutputStream f = new FileOutputStream(path);
+        try(FileOutputStream f = new FileOutputStream(save_path);
             BufferedOutputStream b = new BufferedOutputStream(f);
             ObjectOutputStream out = new ObjectOutputStream(b)){
-            out.writeObject(dethLoc);
+            out.writeObject(savedata);
         } catch ( IOException e ) {
             e.printStackTrace();
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void loadDeth(){
-        if (datFilecheck(false)){return;}
-        try(FileInputStream f = new FileInputStream(path);
+    public HashSet<XZLocation> loadDeth(String load_path){
+        if (datFilecheck(false,load_path)){return null;}
+        try(FileInputStream f = new FileInputStream(load_path);
             BufferedInputStream b = new BufferedInputStream(f);
             ObjectInputStream in = new ObjectInputStream(b)){
-            dethLoc = (HashSet<XZLocation>) in.readObject();
+            return (HashSet<XZLocation>) in.readObject();
         } catch ( IOException | ClassNotFoundException e ) {
             e.printStackTrace();
         }
+        return null;
     }
 }

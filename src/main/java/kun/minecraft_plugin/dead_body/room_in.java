@@ -20,7 +20,6 @@ public class room_in implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event){
         Player p=event.getPlayer();
         m.setFirst_sp(p.getLocation());
-        p.teleport(m.getFirst_sp());
     }
 
     @EventHandler
