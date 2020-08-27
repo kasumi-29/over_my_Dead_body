@@ -8,3 +8,11 @@ commands:
     description: "安全地帯を作成します"
     permission: op
     usage: "/<command>"
+  save-locate:
+    description: "死亡地点、安全地帯に関する情報をファイルに書き出します"
+    permission: op
+    usage: "/<command>"
+  load-locate:
+    description: "死亡地点、安全地帯に関する情報をファイルから読み込みます"
+    permission: op
+    usage: "/<command>"

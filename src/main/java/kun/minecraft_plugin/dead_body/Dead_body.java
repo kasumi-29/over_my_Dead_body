@@ -3,14 +3,15 @@ package kun.minecraft_plugin.dead_body;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public final class Dead_body extends JavaPlugin {
     private Location first_sp=null;
@@ -19,9 +20,16 @@ public final class Dead_body extends JavaPlugin {
     private final String safe_path="plugins\\dead_body\\safeLoc.dat";
     private HashSet<XZLocation> dethLoc;
     private HashSet<XZLocation> safeZone;
+    static private class zeroArray implements TabCompleter {
+        @Override
+        public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args){
+            return new ArrayList<>();
+        }
+    }
 
     @Override
     public void onEnable() {
+        //Todo コンフィグファイルからの読み込み
         dethLoc=new HashSet<>();
         safeZone =new HashSet<>();
         getServer().getPluginManager().registerEvents(new room_in(this), this);
@@ -34,7 +42,21 @@ public final class Dead_body extends JavaPlugin {
             setFirst_sp(((Player) sender).getLocation());
             return true;
         });
-        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter((sender, command, alias, args) -> new ArrayList<>());
+        Objects.requireNonNull(getCommand("save-locate")).setExecutor((sender, command, label, args) -> {
+            saveDeth(deth_path,dethLoc);
+            saveDeth(safe_path,safeZone);
+            sender.sendMessage("Save完了......");
+            return true;
+        });
+        Objects.requireNonNull(getCommand("load-locate")).setExecutor((sender, command, label, args) -> {
+            dethLoc=loadDeth(deth_path);
+            safeZone=loadDeth(safe_path);
+            sender.sendMessage("Load完了......");
+            return true;
+        });
+        Objects.requireNonNull(getCommand("set-safezone")).setTabCompleter(new zeroArray());
+        Objects.requireNonNull(getCommand("save-locate")).setTabCompleter(new zeroArray());
+        Objects.requireNonNull(getCommand("load-locate")).setTabCompleter(new zeroArray());
         dethLoc=loadDeth(deth_path);
         safeZone=loadDeth(safe_path);
 

@@ -1,0 +1,3 @@
+default_safeZone: 3
+deth_path: "plugins\\dead_body\\dethLoc.dat"
+safe_path: "plugins\\dead_body\\safeLoc.dat"
