@@ -27,6 +27,10 @@ public final class Dead_body extends JavaPlugin {
         }
     }
 
+    /**
+     * 読み込み時の初期設定を行う.
+     * <p>コンフィグファイルから読み込む、コマンドの登録など</p>
+     */
     @Override
     public void onEnable() {
         deathLoc=new HashSet<>();
@@ -36,7 +40,6 @@ public final class Dead_body extends JavaPlugin {
         big=getConfig().getInt("default_safeZone");
         death_path=getConfig().getString("death_path");
         safe_path=getConfig().getString("safe_path");
-
         big=Math.max(big, 0);
         big=Math.min(big,16);
 
@@ -88,6 +91,11 @@ public final class Dead_body extends JavaPlugin {
         getLogger().info("読み込み完了！");
     }
 
+    /**
+     * 情報を返却する.
+     * <p>初期スポーン、危険地帯の数、安全地帯の数をこの順にセットする</p>
+     * @return セットした情報のリスト
+     */
     public ArrayList<String> info(){
         ArrayList<String> output=new ArrayList<>();
         if(first_sp!=null){
@@ -100,12 +108,21 @@ public final class Dead_body extends JavaPlugin {
         return output;
     }
 
+    /**
+     * 終了時の処理を行う.
+     * <p>ファイルへの書き出しを行う。<br>ただしファイルの書き出しを行う際は、 sl_comp を用いること。</p>
+     */
     @Override
     public void onDisable(){
         sl_comp(true);
     }
 
-    private void sl_comp(boolean flag){
+    /**
+     * 危険地帯と安全地帯の情報を入出力する.
+     * <p>ファイルへの書き出しまたは読み込みを行う。なお、値はそのままclass内で保持されます。</p>
+     * @param flag trueの場合saveを行い、falseの場合はloadを行う
+     */
+    public void sl_comp(boolean flag){
         if(flag){//save側
             saveDeath(death_path,deathLoc);
             saveDeath(safe_path,safeZone);
@@ -123,10 +140,19 @@ public final class Dead_body extends JavaPlugin {
         }
     }
 
+    /**
+     * 危険地帯（これまでに死んだ場所）に居るかどうか判定する.
+     * @param l 判定する位置情報
+     * @return 危険地帯の位置に居れば真を返す
+     */
     public boolean killChecker(Location l){
         return deathLoc.contains(new XZLocation(l));
     }
 
+    /**
+     * 危険地帯に新しく位置情報を登録する.
+     * @param l 登録する位置情報
+     */
     public void addDeathLoc(Location l){
         XZLocation XZl=new XZLocation(l);
         if(!safeZone.contains(XZl)) {
@@ -135,6 +161,15 @@ public final class Dead_body extends JavaPlugin {
             getLogger().info("安全地帯で死亡イベントが発生しました。");
         }
     }
+
+    /**
+     * ログイン時の処理.
+     * <p>
+     *     スポーン範囲の調整、安全地帯の生成を行う。<br>
+     *     ただしワールド生成後、初めてログインするプレイヤーのみ実行される。
+     * </p>
+     * @param l 安全地帯の中心となる位置情報
+     */
     public void setFirst_sp(Location l){
         if(first_sp==null) {
             first_sp = l.clone();
@@ -184,6 +219,10 @@ public final class Dead_body extends JavaPlugin {
         return l;
     }
 
+    /**
+     * 初期スポーンの位置情報を取得する.
+     * @return 初期スポーンの位置情報
+     */
     public Location getFirst_sp(){
         return first_sp;
     }
@@ -200,6 +239,13 @@ public final class Dead_body extends JavaPlugin {
         }
         return !output;
     }
+
+    /**
+     * ファイルへセーブする.
+     * <p>危険地帯と安全地帯を一括でセーブする際は、 sl_comp を利用すること。</p>
+     * @param save_path ファイルのパス。eula.txtからの相対パス、または絶対パスを指定する。
+     * @param save_data セーブする実データ。
+     */
     public void saveDeath(String save_path, HashSet<XZLocation> save_data){
         if(datFilecheck(true,save_path)){
             getLogger().info("ファイルをセーブするのに失敗しました。");
@@ -214,6 +260,12 @@ public final class Dead_body extends JavaPlugin {
         }
     }
 
+    /**
+     * ファイルからロードする.
+     * <p>危険地帯と安全地帯を一括でロードする際は、 sl_comp を利用すること。</p>
+     * @param load_path ファイルのパス。eula.txtからの相対パス、または絶対パスを指定する。
+     * @return ロードしたデータ。
+     */
     @SuppressWarnings("unchecked")
     public HashSet<XZLocation> loadDeath(String load_path){
         if (datFilecheck(false,load_path)){return null;}

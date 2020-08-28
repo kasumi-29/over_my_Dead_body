@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"kun.minecraft_plugin.dead_body","l":"Dead_body"},{"p":"kun.minecraft_plugin.dead_body","l":"room_in"},{"p":"kun.minecraft_plugin.dead_body","l":"XZLocation"},{"l":"すべてのクラス","url":"allclasses-index.html"}]
