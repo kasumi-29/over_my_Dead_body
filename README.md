@@ -75,7 +75,10 @@ minecraftの bukkit/spigot サーバーで利用できるサーバープラグ�
 特に大人数で行うと楽しめるかもしれません。
 
 ## 動作確認済環境
-- 現在テスト中
+- 推奨環境  
+Java 13 , CraftBukkit 1.16.2
+
+**（JavaまたはCraftBukkit のバージョンによっては動かない場合があります）**
 
 ## リファレンス
 - [Javadoc](https://kasumi-29.github.io/over_my_Dead_body/Docs/index.html)

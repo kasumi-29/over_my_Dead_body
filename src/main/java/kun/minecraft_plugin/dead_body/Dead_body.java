@@ -46,7 +46,7 @@ public final class Dead_body extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new room_in(this), this);
         Objects.requireNonNull(getCommand("set-safezone")).setExecutor((sender, command, label, args) -> {
             if(!(sender instanceof Player)){
-                sender.sendMessage("[!!!ERR!!!]ゲーム内から実行してください");
+                sender.sendMessage("[!!!ERR!!!]プレイヤーが実行してください");
                 return false;
             }
             first_sp=null;
