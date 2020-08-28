@@ -7,7 +7,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -122,11 +121,10 @@ public final class Dead_body extends JavaPlugin {
                         getStepY(l, 1).getBlock().setType(Material.AIR);
                     }
                     getStepY(l,2).getBlock().setType(Material.AIR);
-
-                    l=getNextZ(l);
+                    getNextZ(l);
                 }
-                l=resetZ(l,n);
-                l=getNextX(l);
+                resetZ(l,n);
+                getNextX(l);
             }
 
         }
@@ -135,19 +133,17 @@ public final class Dead_body extends JavaPlugin {
     private boolean checkP(int ox,int oz,int n){
         return (ox==0||ox==n-1)&&(oz==0||oz==n-1);
     }
-    private Location resetZ(Location l,int b){
+    private void resetZ(Location l, int b){
         l.setZ(l.getZ()-b);
-        return l;
     }
-    private Location getNextZ(Location l){
+    private void getNextZ(Location l){
         l.setZ(l.getZ()+1);
-        return l;
     }
-    private Location getNextX(Location l){
+    private void getNextX(Location l){
         l.setX(l.getX()+1);
-        return l;
     }
-    private Location getStepY(Location l,int y){
+    private Location getStepY(Location location,int y){
+        Location l=location.clone();
         l.setY(l.getY()+y);
         return l;
     }
