@@ -16,3 +16,7 @@ commands:
     description: "死亡地点、安全地帯に関する情報をファイルから読み込みます"
     permission: op
     usage: "/<command>"
+  info-locate:
+    description: "初期スポーン位置などの情報を表示します"
+    permission: op
+    usage: "/<command>"
