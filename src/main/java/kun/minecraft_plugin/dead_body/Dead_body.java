@@ -33,9 +33,9 @@ public final class Dead_body extends JavaPlugin {
         safeZone =new HashSet<>();
 
         saveDefaultConfig();
-        big=getConfig().getInt("big");
-        death_path=getConfig().getString("death_path");
-        safe_path=getConfig().getString("safe_path");
+        big=getConfig().getInt("big",big);
+        death_path=getConfig().getString("death_path",death_path);
+        safe_path=getConfig().getString("safe_path",safe_path);
 
         getServer().getPluginManager().registerEvents(new room_in(this), this);
         Objects.requireNonNull(getCommand("set-safezone")).setExecutor((sender, command, label, args) -> {
@@ -105,37 +105,53 @@ public final class Dead_body extends JavaPlugin {
     }
     public void setFirst_sp(Location l){
         if(first_sp==null) {
-            l.setX(Math.round(l.getX()));
-            l.setY(Math.round(l.getY()));
-            l.setZ(Math.round(l.getZ()));
             first_sp = l.clone();
             Objects.requireNonNull(l.getWorld()).setSpawnLocation(l);
             l.getWorld().setGameRule(GameRule.SPAWN_RADIUS, 0);
 
-            l.setX(l.getX()-big-1);
+            l.setX(l.getX()-big);
+            l.setZ(l.getZ()-big);
             l.setY(l.getY()-1);
-            l.setZ(l.getZ()-big-1);
-            for (int x=0;x<=2*big+1;x++){
-                for(int z=0;z<=2*big+1;z++){
+            final int n=big*2+1;
+            for(int ox=0; ox<n; ox++) {
+                for (int oz=0; oz<n; oz++) {
                     l.getBlock().setType(Material.BEDROCK);
-                    Location m=l.clone();
-                    for (int q=1;q<4;q++){
-                        m.setY(m.getY()+1);
-                        m.getBlock().setType(Material.AIR);
-                        if(q==1){
-                            if((x==0||x==2*big+1)&(z==0||z==2*big+1)){
-                                m.getBlock().setType(Material.BEDROCK);
-                            }
-                        }
+                    if(checkP(ox,oz,n)){
+                        getStepY(l,1).getBlock().setType(Material.BEDROCK);
+                    }else {
+                        getStepY(l, 1).getBlock().setType(Material.AIR);
                     }
-                    safeZone.add(new XZLocation(l));
-                    l.setZ(l.getZ()+1);
+                    getStepY(l,2).getBlock().setType(Material.AIR);
+
+                    l=getNextZ(l);
                 }
-                l.setX(first_sp.getX()+x-big);
-                l.setZ(first_sp.getZ()-big-1);
+                l=resetZ(l,n);
+                l=getNextX(l);
             }
+
         }
     }
+
+    private boolean checkP(int ox,int oz,int n){
+        return (ox==0||ox==n-1)&&(oz==0||oz==n-1);
+    }
+    private Location resetZ(Location l,int b){
+        l.setZ(l.getZ()-b);
+        return l;
+    }
+    private Location getNextZ(Location l){
+        l.setZ(l.getZ()+1);
+        return l;
+    }
+    private Location getNextX(Location l){
+        l.setX(l.getX()+1);
+        return l;
+    }
+    private Location getStepY(Location l,int y){
+        l.setY(l.getY()+y);
+        return l;
+    }
+
     public Location getFirst_sp(){
         return first_sp;
     }

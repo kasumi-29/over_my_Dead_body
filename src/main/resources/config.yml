@@ -1,3 +1,3 @@
 default_safeZone: 3
-death_path: "plugins\\dead_body\\deathLoc.dat"
-safe_path: "plugins\\dead_body\\safeLoc.dat"
+death_path: "plugins\\over_my_Dead_body\\deathLoc.dat"
+safe_path: "plugins\\over_my_Dead_body\\safeLoc.dat"
