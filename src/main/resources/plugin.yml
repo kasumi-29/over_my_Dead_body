@@ -2,6 +2,10 @@ name: over_my_Dead_body
 version: ${project.version}
 main: kun.minecraft_plugin.dead_body.Dead_body
 api-version: 1.15
+description: "一度死亡した場所は、危険地帯となり、入れなくなるプラグインです。\
+危険地帯にサバイバルモードまたはアドベンチャーモードのプレイヤーが侵入した場合、即死します。"
+author: "kasumi-29 (kasumigaura)"
+website: "https://github.com/kasumi-29/over_my_Dead_body"
 
 commands:
   set-safezone:
