@@ -93,7 +93,7 @@ public final class Dead_body extends JavaPlugin {
 
     /**
      * 情報を返却する.
-     * <p>初期スポーン、危険地帯の数、安全地帯の数をこの順にセットする</p>
+     * <p>初期スポーン、危険地帯の数、安全地帯の数をこの順にセットしたArrayListを返却する</p>
      * @return セットした情報のリスト
      */
     public ArrayList<String> info(){
