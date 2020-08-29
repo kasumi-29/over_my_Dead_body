@@ -84,4 +84,5 @@ Java 13 , CraftBukkit 1.16.2
 - [Javadoc](https://kasumi-29.github.io/over_my_Dead_body/Docs/index.html)
 
 ## ダウンロード
-- [ダウンロードはこちら](https://github.com/kasumi-29/over_my_Dead_body/releases/tag/v2.1.0)
+現在開発中です
+- [ ~~ダウンロードはこちら~~ ](https://github.com/kasumi-29/over_my_Dead_body/releases/tag/v2.1.0)
