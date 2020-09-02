@@ -5,7 +5,7 @@ minecraftの bukkit/spigot サーバーで利用できるサーバープラグ�
 なお、このプラグインでは、死んだ場所が全員で共有されるため、自身が死んだ場所でなくとも、注意が必要です。  
 
 なお初期スポーン周辺には、岩盤で出来た安全地帯が生成されます。
-この安全地帯の中で死んだとしても、危険地帯にならないため、歩いているだけで強制的に殺された、といったことはなくなります。
+この安全地帯の中で死んだとしても、危険地帯にならないため、リスポーンキルは回避できます。
 
 ## 追加されるコマンド
 このプラグインでは、以下の4つのコマンドが追加されます。
@@ -84,5 +84,4 @@ Java 13 , CraftBukkit 1.16.2
 - [Javadoc](https://kasumi-29.github.io/over_my_Dead_body/Docs/index.html)
 
 ## ダウンロード
-現在開発中です
-- [ ~~ダウンロードはこちら~~ ](https://github.com/kasumi-29/over_my_Dead_body/releases/tag/v2.1.0)
+- [ ダウンロードはこちら ](https://github.com/kasumi-29/over_my_Dead_body/releases/tag/v2.1.0)
