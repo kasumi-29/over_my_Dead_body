@@ -6,7 +6,7 @@
 
     <groupId>kun.minecraft_plugin</groupId>
     <artifactId>over_my_Dead_body</artifactId>
-    <version>2.0.2</version>
+    <version>2.1.0</version>
     <packaging>jar</packaging>
 
     <name>over_my_Dead_body</name>
